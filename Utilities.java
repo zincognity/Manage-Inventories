@@ -84,7 +84,6 @@ public class Utilities{
                 // Permite continuar y volver a mostrar el menú.
                 continue;
             }
-            Clear();
             // Si isEnd es true, muestra en pantalla (Saliendo...).
             if(isEnd) System.out.println("Saliendo...");
             // Si isCorrect es false, muestra que tiene que ingresar una opción válida.
@@ -124,14 +123,40 @@ public class Utilities{
                 Menu("Gestión de Productos", menuProduct, in);
                 break;
             case "CreateProduct":
+                CreateProduct(in);
                 break;
             case "EditProduct":
+                EditProduct(in);
                 break;
+            case "EditNameP":
+                EditParams(in, "Nombre");
+                break;  
+            case "EditDescription":
+                EditParams(in, "Descripción");
+                break;  
+            case "EditPrice":
+                EditParams(in, "Price");
+                break;  
+            case "EditStock":
+                EditParams(in, "Stock");
+                break;    
             case "DeleteProduct":
+                DeleteProduct(in);
+                break;
+            case "ManageOrder":
+                String[][] menuOrder = {{"RegisterOrder", "Registrar Pedido"}, {"EditOrder", "Editar Pedido"}, {"DeleteOrder", "Eliminar Pedido"}, {"AllOrders", "Ver Pedidos"}};
+                Menu("Gestión de Productos", menuOrder, in);
+                break;
+            case "RegisterOrder":
+                break;
+            case "EditOrder":
+                break;
+            case "DeleteOrder":
+                break;
+            case "AllOrders":
                 break;
 
-            case "ManageOrder":
-                break;
+
             case "Report":
                 break;
             
@@ -345,5 +370,140 @@ public class Utilities{
         }
         // Retorna el número.
         return identity;
+    }
+
+    /*
+     * Creamos la función CreateProduct para abrir un formulario de crear un producto.
+     * Init CreateProduct Function
+     */
+    public void CreateProduct(Scanner in){
+        System.out.println("Ingresa el nombre del producto:");
+        String name = in.nextLine();
+        System.out.println("Ingresa una descripción: (opcional)");
+        String description = in.nextLine();
+        // Creamos las variables isCorrect, price y stock e inicializamos con el valor predeterminado.
+        boolean isCorrect = false;
+        int price = 0, stock = 0;
+        do {
+            // Asignamos un try para evitar errores de tipeo.
+            try {
+                System.out.println("Ingrese el precio:");
+                price = in.nextInt();
+                in.nextLine();
+                System.out.println("Ingrese el stock disponible:");
+                stock = in.nextInt();
+                in.nextLine();
+                // Si el precio y el stock se definen con valores mayores a 0, es porque son valores contables reales.
+                if(price > 0 && stock > 0) isCorrect = true;
+            } catch (java.util.InputMismatchException e) { // Identificamos el valor de la entrada del scanner, y definimos el error.
+                // Muestra el mensaje de error.
+                System.out.println("Entrada inválida. Por favor, ingrese un número entero.");
+                in.nextLine();
+                // Permite continuar y volver a mostrar el menú.
+                continue;
+            }
+        } while (!isCorrect);
+        System.out.println();
+        int id = idProduct.size() + 1;
+        // Se agregan los valores de forma equitativa.
+        idProduct.add(String.valueOf(id)); // Convierte el id en String.
+        nameProduct.add(name);
+        descriptionProduct.add(description);
+        priceProduct.add(price);
+        stockProduct.add(stock);
+        System.out.println("El producto se ha registrado correctamente.");
+    }
+    // End CreateProduct Function
+
+    public int identity;
+    /*
+     * Creamos la función EditProduct que nos permitirá cambiar los parámetros de un producto.
+     * Init EditProduct Function.
+     */
+    public void EditProduct(Scanner in){
+        this.identity = -1;
+        for (String product : nameProduct) {
+            System.out.println("- " + product);
+        }
+        System.out.println("Ingrese el nombre del producto a editar");
+        String searchProduct = in.nextLine();
+        int identity = getProductIdentity(searchProduct);
+        if(identity == -1) return;
+        this.identity = identity;
+        String[][] menu = {{"EditNameP","Editar Nombre"},{"EditDescription", "Editar Descripción"}, {"EditPrice", "Editar Precio"}, {"EditStock", "Editar Stock"}};
+        Menu("Edición de producto", menu, in);
+    }
+    // End EditProduct Function.
+
+    public int getProductIdentity(String searchName){
+        // Se declaran y definen las variables number e identity.
+        int number = 0, identity = -1;
+        boolean isFound = false;
+        // Se hace una búsqueda dato por dato para retornar una coincidencia.
+        for (Object object : nameProduct) {
+            // Si uno de los datos coincide con el dato ingresado, la variable que iba sumando, se define en la variable identity.
+            if(object.equals(searchName)){
+                identity = number;
+                isFound = true;
+            }
+            number++;
+        }
+        // Si no lo encuentra muestra un mensaje referente.
+        if(!isFound){
+            System.out.println("Producto no encontrado.");
+        }
+        // Retorna el número.
+        return identity;
+    }
+
+    public void EditParams(Scanner in, String param){
+        switch (param) {
+            case "Nombre":
+                System.out.println("Ingrese el nuevo nombre:" + "(" + param + " actual: " + nameProduct.get(identity) + ")");
+                String newNameP = in.nextLine();
+                nameProduct.set(identity, newNameP);
+                System.out.println("El nombre se ha actualizado correctamente.");
+                break;
+            case "Descripción":
+                System.out.println("Ingrese la nueva descripción:" + "(" + param + " actual: " + descriptionProduct.get(identity) + ")");
+                String newDescription = in.nextLine();
+                descriptionProduct.set(identity, newDescription);
+                System.out.println("La descripción se ha actualizado correctamente.");
+                break;
+            case "Precio":
+                System.out.println("Ingrese el nuevo precio:" + "(" + param + " actual: " + priceProduct.get(identity) + ")");
+                int newPrice = in.nextInt();
+                in.nextLine();
+                priceProduct.set(identity, newPrice);
+                System.out.println("El precio se ha actualizado correctamente.");
+                break;
+            case "Stock":
+                System.out.println("Ingrese el nuevo stock:" + "(" + param + " actual: " + stockProduct.get(identity) + ")");
+                int newStock = in.nextInt();
+                in.nextLine();
+                stockProduct.set(identity, newStock);
+                System.out.println("El stock se ha actualizado correctamente.");
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void DeleteProduct(Scanner in){
+        this.identity = -1;
+        for (String product : nameProduct) {
+            System.out.println("- " + product);
+        }
+        System.out.println("Ingrese el nombre del producto a eliminar.");
+        String searchProduct = in.nextLine();
+        int identity = getProductIdentity(searchProduct);
+        if(identity == -1) return;
+        this.identity = identity;
+        idProduct.remove(identity);
+        nameProduct.remove(identity);
+        descriptionProduct.remove(identity);
+        priceProduct.remove(identity);
+        stockProduct.remove(identity);
+        System.out.println("El producto se ha eliminado correctamente.");
     }
 }
