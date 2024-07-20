@@ -421,20 +421,30 @@ public class Utilities{
      * Init EditProduct Function.
      */
     public void EditProduct(Scanner in){
+        // Reseteamos el valor de identity.
         this.identity = -1;
+        // Se muestra la lista de los nombres de los productos.
         for (String product : nameProduct) {
             System.out.println("- " + product);
         }
         System.out.println("Ingrese el nombre del producto a editar");
         String searchProduct = in.nextLine();
+        // Se obtiene la posición del nombre del producto.
         int identity = getProductIdentity(searchProduct);
+        // Si el valor identity es -1 es porque no encontró el producto.
         if(identity == -1) return;
+        // Se le asigna a la variable local el nuevo identity.
         this.identity = identity;
+        // Se desplaza un menú de edición de producto.
         String[][] menu = {{"EditNameP","Editar Nombre"},{"EditDescription", "Editar Descripción"}, {"EditPrice", "Editar Precio"}, {"EditStock", "Editar Stock"}};
         Menu("Edición de producto", menu, in);
     }
     // End EditProduct Function.
 
+    /*
+     * 
+     * Init getProductIdentity
+     */
     public int getProductIdentity(String searchName){
         // Se declaran y definen las variables number e identity.
         int number = 0, identity = -1;
