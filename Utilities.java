@@ -9,15 +9,27 @@ public class Utilities{
     ArrayList<String> username;
     ArrayList<String> password;
     ArrayList<String> type;
-    ArrayList<ArrayList<String>> database;
+    ArrayList<ArrayList<String>> userDatabase;
     public String auth;
     //End User Variables.
+
+    /*
+     * Definición de variables para la clase Product.
+     * Init Product Variables.
+     */
+    ArrayList<String> idProduct;
+    ArrayList<String> nameProduct;
+    ArrayList<String> descriptionProduct;
+    ArrayList<Integer> priceProduct;
+    ArrayList<Integer> stockProduct;
+    ArrayList<ArrayList<String>> productDatabase;
+    //End Product Variables.
 
     /*
      * Se crea la función menú, que será el handler para todos los menú.
      * Init Menu Function.
      */
-    public void Menu(String title, String[] options, Scanner in){
+    public void Menu(String title, String[][] options, Scanner in){
         // Definición e inicialización de variables: opcion que permite identificar la opción elegida, e isEnd que permite identificar la opción salir. 
         int option = 0;
         boolean isEnd = false;
@@ -34,7 +46,7 @@ public class Utilities{
             for (int i = 0; i <= options.length; i++) { // Condicionamos con <= porque queremos que una función predeterminada (n. Salir) esté al final.
                 // Si la variable i es igual al tamaño de las opciones, es porque la opción no se ha definido, por lo tanto la toma como la opción de Salir del programa.
                 if(i == options.length) System.out.println(i+1 + ". Salir");
-                else System.out.println(i+1 + ". " + options[i]);
+                else System.out.println(i+1 + ". " + options[i][1]);
                 // De lo contrario es porque las opciones ya se han definido, y las muestra en pantalla.
             }
             // Se hace un try para evitar errores de tipeo por parte del usuario.
@@ -55,9 +67,10 @@ public class Utilities{
                     }
                     // Si no, la opción escogida se puede mostrar en pantalla.
                     if(option == i){
-                        System.out.println("Ha elegido: " + options[i-1]);
+                        Clear();
+                        System.out.println("Ha elegido: " + options[i-1][1]);
                         // Se llama a la función option, y se le da como atributo el String, y el Scanner.
-                        Option(options[i-1], in);
+                        Option(options[i-1][1] ,options[i-1][0], in);
                     }
                     // De lo contrario es porque ha escogido una opción que no está dentro de las opciones.
                     if (option > options.length + 1 || option < 0){
@@ -71,6 +84,7 @@ public class Utilities{
                 // Permite continuar y volver a mostrar el menú.
                 continue;
             }
+            Clear();
             // Si isEnd es true, muestra en pantalla (Saliendo...).
             if(isEnd) System.out.println("Saliendo...");
             // Si isCorrect es false, muestra que tiene que ingresar una opción válida.
@@ -83,21 +97,48 @@ public class Utilities{
      * Se crea la función option, que permite identificar las opciones escogidas en el menú.
      * Init Option Function.
      */
-    public void Option(String option, Scanner in){
+    public void Option(String title, String option, Scanner in){
         // Se identifican las opciones dependiendo el String con la ayuda de un Switch.
         switch (option) {
-            case "Iniciar Sesión":
+            case "Auth":
                 AuthUser(in); // Se llama a la función authUser.
                 break;
-            case "Registrarse":
+            case "Register":
                 RegisterUser(in); // Se llama a la función registerUser.
                 break;
-            case "":
+            case "ManageUser":
+                String[][] menuManager = {{"CreateUser", "Crear Usuario"}, {"ToggleType", "Cambiar tipo de Usuario"}, {"DeleteUser", "Eliminar Usuario"}};
+                Menu("Gestión de Usuarios", menuManager, in);
                 break;
+            case "CreateUser":
+                RegisterUser(in);
+                break;
+            case "ToggleType":
+                ChangeType(in);
+                break;
+            case "DeleteUser":
+                DeleteUser(in);
+                break;
+            case "ManageProduct":
+                String[][] menuProduct = {{"CreateProduct", "Crear Producto"}, {"EditProduct", "Editar Producto"}, {"DeleteProduct", "Eliminar Producto"}};
+                Menu("Gestión de Productos", menuProduct, in);
+                break;
+            case "CreateProduct":
+                break;
+            case "EditProduct":
+                break;
+            case "DeleteProduct":
+                break;
+
+            case "ManageOrder":
+                break;
+            case "Report":
+                break;
+            
             case "Gestionar Usuarios":
                 // Se abre otro menú para gestionar a los Usuarios.
                 String[] menu = {"Agregar Usuario", "Cambiar tipo de Usuario", "Cambiar Contraseña", "Eliminar Usuario"};
-                Menu("Gestión de Usuarios", menu, in);
+                //Menu("Gestión de Usuarios", menu, in);
                 break;
             case "Agregar Usuario":
                 System.out.println("Usuario agregao");
@@ -118,9 +159,20 @@ public class Utilities{
         String username = in.nextLine();
         System.out.println("Contraseña:");
         String password = in.nextLine();
+        Clear();
         Auth(username, password, in);
     }
     // End authUser Function.
+
+    /*
+     * Se crea la función Clear para limpiar la pantalla.
+     * Init Clear Function.
+     */
+    public void Clear(){
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();
+    }
+    // End Clear Function.
 
     /*
      * Definimos la función que permite la autenticación de usuarios, ya sea tipo "Usuario" o "Administrador".
@@ -130,7 +182,6 @@ public class Utilities{
         // Definimos las variables para reconocer si el usuario existe o si la contraseña obtenida es incorrecta, éstas inicializan en falso.
         boolean userFound = false;
         boolean correctPass = false;
-
         // Hacemos la búsqueda con un for, esto nos permite buscar dato por dato hasta encontrar uno similar al dato ingresado (el ciclo se repite dependiendo el tamaño de la lista o array de usuarios).
         for (int i = 0; i < this.username.size(); i++) {
             // Verifica si el usuario ingresado existe.
@@ -170,7 +221,7 @@ public class Utilities{
      */
     public void Admin(Scanner in){
         // Se definen los apartados que le aparecerán al administrador en el menú.
-        String[] menu = {"Gestionar Usuarios", "Gestionar Productos", "Gestionar Informe"};
+        String[][] menu = {{"ManageUser", "Gestionar Usuarios"}, {"ManageProduct", "Gestionar Productos"}, {"ManageOrder", "Gestionar Pedidos"}, {"Report", "Generar Informe"}};
         // Se llama a la función menú pasándole los parámetros de menu de tipo Array y el in de tipo Scanner.
         Menu("Principal Admin", menu, in);
     }
@@ -182,7 +233,7 @@ public class Utilities{
      */
     public void User(Scanner in){
         String[] menu = {"Gestionar Pedidos", "Gestionar Informe"};
-        Menu("Principal User" ,menu, in);
+        //Menu("Principal User" ,menu, in);
     }
     // End User Function.
 
@@ -229,4 +280,70 @@ public class Utilities{
         } while (!isCorrect);
     }
     // End RegisterUser Function.
+
+    /*
+     * Creamos la función ChangeType que togglea el tipo de usuario.
+     * Init ChangeType Function.
+     */
+    public void ChangeType(Scanner in){
+        System.out.println("Ingrese el nombre del usuario a cambiar de tipo:");
+        String searchUsername = in.nextLine();
+        // Recolectamos la variable entera de la función getUserIdentity para identificar en qué posición se encuentra el usuario.
+        int res = getUserIdentity(searchUsername);
+        System.out.println(res);
+        // Si la respuesta es -1 es porque no encontró al usuario.
+        if(res == -1) return;
+        // Obtenemos el tipo de usuario, ya sea User o Admin.
+        String getType = type.get(res);
+        // Si es Admin, lo cambia a User.
+        if(getType.equals("Admin")) type.set(res, "User");
+        // Si es User, lo cambia a Admin.
+        if(getType.equals("User")) type.set(res, "Admin");
+        System.out.println("Se ha cambiado el tipo de usuario exitósamente.");
+    }
+    // End ChangeType Function
+
+    /*
+     * Creamos la función DeleteUser que eliminará al usuario haciendo una búsqueda por su username.
+     * Init DeleteUser Function.
+     */
+    public void DeleteUser(Scanner in){
+        System.out.println("Ingrese el nombre del usuario a eliminar:");
+        String searchUsername = in.nextLine();
+        // Recolectamos la variable entera de la función getUserIdentity para identificar en qué posición se encuentra el usuario.
+        int res = getUserIdentity(searchUsername);
+        // Si la respuesta es -1 es porque no encontró al usuario.
+        if(res == -1) return;
+        // Se remueven los datos dependiento el orden del usuario.
+        username.remove(res);
+        password.remove(res);
+        type.remove(res);
+        System.out.println("Se ha eliminado al usuario exitósamente.");
+    }
+    // End DeleteUser Function.
+
+    /*
+     * Se crea la función getUserIdentity para buscar la posición del usuario.
+     * Init getUserIdentity Function
+     */
+    public int getUserIdentity(String searchUsername){
+        // Se declaran y definen las variables number e identity.
+        int number = 0, identity = -1;
+        boolean isFound = false;
+        // Se hace una búsqueda dato por dato para retornar una coincidencia.
+        for (Object object : username) {
+            // Si uno de los datos coincide con el dato ingresado, la variable que iba sumando, se define en la variable identity.
+            if(object.equals(searchUsername)){
+                identity = number;
+                isFound = true;
+            }
+            number++;
+        }
+        // Si no lo encuentra muestra un mensaje referente.
+        if(!isFound){
+            System.out.println("Usuario no encontrado.");
+        }
+        // Retorna el número.
+        return identity;
+    }
 }
