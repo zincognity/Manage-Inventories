@@ -132,6 +132,11 @@ public class Utilities{
                 DeleteUser(in);
                 break;
             case "ManageProduct":
+                if(type.get(identity).equals("User")){
+                    String[][] menuProductUser = {{"EditProduct", "Editar Producto"}};
+                    Menu(title, menuProductUser, in);
+                    return;
+                }
                 String[][] menuProduct = {{"CreateProduct", "Crear Producto"}, {"EditProduct", "Editar Producto"}, {"DeleteProduct", "Eliminar Producto"}};
                 Menu("Gestión de Productos", menuProduct, in);
                 break;
@@ -172,26 +177,21 @@ public class Utilities{
             case "EditTable":
                 EditParams(in, "Mesa");
                 break;
-            case "EditOrders":
+            case "EditOrder":
                 EditParams(in, "Orden");
                 break;
             case "DeleteOrder":
+                DeleteOrder(in);
                 break;
             case "AllOrders":
                 AllOrders();
                 break;
-
             case "Report":
+                GenerateReport();
                 break;
             
-            case "Gestionar Usuarios":
-                // Se abre otro menú para gestionar a los Usuarios.
-                String[] menu = {"Agregar Usuario", "Cambiar tipo de Usuario", "Cambiar Contraseña", "Eliminar Usuario"};
-                //Menu("Gestión de Usuarios", menu, in);
-                break;
-            case "Agregar Usuario":
-                System.out.println("Usuario agregao");
             case null:
+                break;
             default:
                 System.out.println("asd");
                 break;
@@ -281,8 +281,8 @@ public class Utilities{
      * Init User Function.
      */
     public void User(Scanner in){
-        String[] menu = {"Gestionar Pedidos", "Gestionar Informe"};
-        //Menu("Principal User" ,menu, in);
+        String[][] menu = {{"ManageProduct", "Gestionar Productos"}, {"ManageOrder", "Gestionar Órdenes"}, {"Report", "Generar Reporte"}};
+        Menu("Principal User" ,menu, in);
     }
     // End User Function.
 
@@ -648,7 +648,7 @@ public class Utilities{
         // Se le asigna a la variable local el nuevo identity.
         this.identity = identity;
         // Se desplaza un menú de edición de producto.
-        String[][] menu = {{"EditTitular","Editar Titular"},{"EditTable", "Editar Mesa"}, {"EditOrders", "Editar Órdenes"}};
+        String[][] menu = {{"EditTitular","Editar Titular"},{"EditTable", "Editar Mesa"}, {"EditOrder", "Editar Órdenes"}};
         Menu("Edición de orden", menu, in);
     }
 
@@ -678,6 +678,30 @@ public class Utilities{
     }
     // End getProductIdentity Function.
 
+    public void DeleteOrder(Scanner in){
+        // Se resetea el valor de identity.
+        this.identity = -1;
+        // Muestra la lista de los nombres de los productos.
+        for (String order : idOrder) {
+            System.out.println("- " + order);
+        }
+        System.out.println("Ingrese el ID de la orden a eliminar.");
+        String searchOrder = in.nextLine();
+        // Se descubre la posición del producto.
+        int identity = GetOrderIdentity(searchOrder);
+        // Si identity es -1 es porque no se ha encontrado el producto.
+        if(identity == -1) return;
+        // Se setea el identity local con el nuevo identity.
+        this.identity = identity;
+        // Se remueven los datos de manera equitativa.
+        orders.remove(titular.get(identity));
+        idOrder.remove(identity);
+        titular.remove(identity);
+        table.remove(identity);
+        totalMount.remove(identity);
+        System.out.println("La orden se ha eliminado correctamente.");
+    }
+
     // End EditProduct Function.
     public void AllOrders(){
         for (int i = 0; i < idOrder.size(); i++) {
@@ -687,5 +711,15 @@ public class Utilities{
             System.out.println(orders.get(titular.get(i)));
             System.out.println(totalMount.get(i));
         }
+    }
+
+    public void GenerateReport(){
+        int total = 0;
+        System.out.println("Número de Órdenes: " + orders.size());
+        for (int string : totalMount) {
+            total = total + string;
+        }
+        System.out.println("Ganancias totales: " + total);
+        System.out.println("El reporte se ha generado exitósamente.");
     }
 }
