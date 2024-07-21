@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Utilities{
+public class Utilities extends Colors{
     /*
      * Definición de variables para la clase Usuario.
      * Init User Variables.
@@ -35,7 +35,6 @@ public class Utilities{
     public ArrayList<String> table;
     public Map<String, ArrayList<String>> orders;
     public ArrayList<Integer> totalMount;
-    public ArrayList<ArrayList<String>> orderDatabase;
     //End Order Variables.
 
     /*
@@ -52,14 +51,18 @@ public class Utilities{
             // Colocamos la variable isCorrect dentro del bucle para inicializarlo con true constantemente.
             isCorrect = true;
             // Mensaje de bienvenida al usuario identificado.
-            if(auth != null) System.out.println("Bienvenid@ " + auth);
+            if(auth != null) System.out.println(TEXT_BLUE +"\nBienvenid@ " + auth);
             // Desplazamiento del menú.
-            System.out.println(title);
+            System.out.printf(TEXT_BRIGHT_YELLOW + "%10s %s\n" , "Menú",title);
             // Realizamos un for para imprimir en la pantalla todas las opciones dependiendo el menu[], que es la lista de opciones.
             for (int i = 0; i <= options.length; i++) { // Condicionamos con <= porque queremos que una función predeterminada (n. Salir) esté al final.
                 // Si la variable i es igual al tamaño de las opciones, es porque la opción no se ha definido, por lo tanto la toma como la opción de Salir del programa.
-                if(i == options.length) System.out.println(i+1 + ". Salir");
-                else System.out.println(i+1 + ". " + options[i][1]);
+                if(i == options.length){
+                    if(title.equals("Principal User") | title.equals("Principal Admin")){
+                        System.out.printf(TEXT_BRIGHT_YELLOW + "%d. " + TEXT_BRIGHT_WHITE +"%s\n" ,i+1, "Cerrar sesión");
+                    } else System.out.printf(TEXT_BRIGHT_YELLOW + "%d. " + TEXT_BRIGHT_WHITE +"%s\n" ,i+1, "Salir");
+                }
+                else System.out.printf(TEXT_BRIGHT_YELLOW +"%d. " + TEXT_BRIGHT_WHITE + "%s\n" ,i+1, options[i][1]);
                 // De lo contrario es porque las opciones ya se han definido, y las muestra en pantalla.
             }
             // Se hace un try para evitar errores de tipeo por parte del usuario.
@@ -81,7 +84,7 @@ public class Utilities{
                     // Si no, la opción escogida se puede mostrar en pantalla.
                     if(option == i){
                         Clear();
-                        System.out.println("Ha elegido: " + options[i-1][1]);
+                        System.out.println("Apartado de: " + TEXT_BRIGHT_YELLOW + options[i-1][1] + TEXT_BRIGHT_WHITE);
                         // Se llama a la función option, y se le da como atributo el String, y el Scanner.
                         Option(options[i-1][1] ,options[i-1][0], in);
                     }
@@ -98,9 +101,15 @@ public class Utilities{
                 continue;
             }
             // Si isEnd es true, muestra en pantalla (Saliendo...).
-            if(isEnd) System.out.println("Saliendo...");
+            if(isEnd){
+                Clear();
+                System.out.println("Saliendo...");
+            };
             // Si isCorrect es false, muestra que tiene que ingresar una opción válida.
-            if(!isCorrect) System.out.println("Opción inválida, por favor, ingrese una opción del menú.");
+            if(!isCorrect){
+                Clear();
+                System.out.println("Opción inválida, por favor, ingrese una opción del menú.");
+            } 
         } while (!isEnd);
     }
     // End Menu Function.
@@ -119,81 +128,85 @@ public class Utilities{
                 RegisterUser(in); // Se llama a la función registerUser.
                 break;
             case "ManageUser":
+                Clear();
+                // Se crea el menú para gestionar a los usuarios.
                 String[][] menuManager = {{"CreateUser", "Crear Usuario"}, {"ToggleType", "Cambiar tipo de Usuario"}, {"DeleteUser", "Eliminar Usuario"}};
                 Menu("Gestión de Usuarios", menuManager, in);
                 break;
             case "CreateUser":
-                RegisterUser(in);
+                RegisterUser(in); // Se llama a la función RegisterUser.
                 break;
             case "ToggleType":
-                ChangeType(in);
+                ChangeType(in); // Se llama a la función ChangeType.
                 break;
             case "DeleteUser":
-                DeleteUser(in);
+                DeleteUser(in); // Se llama a la función DeleteUser.
                 break;
             case "ManageProduct":
+                Clear();
+                // Si el tipo de usuario es User, entonces le manda un menú en específico.
                 if(type.get(identity).equals("User")){
                     String[][] menuProductUser = {{"EditProduct", "Editar Producto"}};
                     Menu(title, menuProductUser, in);
-                    return;
+                    return; // Se hace un return para que no se habra el menú de abajo.
                 }
+                // Se crea el menú para gestionar los productos.
                 String[][] menuProduct = {{"CreateProduct", "Crear Producto"}, {"EditProduct", "Editar Producto"}, {"DeleteProduct", "Eliminar Producto"}};
                 Menu("Gestión de Productos", menuProduct, in);
                 break;
             case "CreateProduct":
-                CreateProduct(in);
+                CreateProduct(in); // Se llama a la función CreateProduct.
                 break;
             case "EditProduct":
-                EditProduct(in);
+                EditProduct(in); // Se llama a la función EditProduct.
                 break;
             case "EditNameP":
-                EditParams(in, "Nombre");
+                EditParams(in, "Nombre"); // Se llama a la función EditParams y le pasamos como parámetro Nombre.
                 break;  
             case "EditDescription":
-                EditParams(in, "Descripción");
+                EditParams(in, "Descripción"); // Se llama a la función EditParams y le pasamos como parámetro Description.
                 break;  
             case "EditPrice":
-                EditParams(in, "Price");
+                EditParams(in, "Precio"); // Se llama a la función EditParams y le pasamos como parámetro Price.
                 break;  
             case "EditStock":
-                EditParams(in, "Stock");
+                EditParams(in, "Stock"); // Se llama a la función EditParams y le pasamos como parámetro Stock.
                 break;    
             case "DeleteProduct":
-                DeleteProduct(in);
+                DeleteProduct(in); // Se llama a la función DeleteProduct.
                 break;
             case "ManageOrder":
+                // Se crea el menú para gestionar las órdenes o pedidos.
                 String[][] menuOrder = {{"RegisterOrder", "Registrar Pedido"}, {"EditOrder", "Editar Pedido"}, {"DeleteOrder", "Eliminar Pedido"}, {"AllOrders", "Ver Pedidos"}};
                 Menu("Gestión de Productos", menuOrder, in);
                 break;
             case "RegisterOrder":
-                RegisterOrder(in);
+                RegisterOrder(in); // Se llama a la función RegisterOrder.
                 break;
             case "EditOrder":
-                EditOrder(in);
+                EditOrder(in); // Se llama a la función EditOrder.
                 break;
             case "EditTitular":
-                EditParams(in, "Titular");
+                EditParams(in, "Titular"); // Se llama a la función EditParams y le pasamos como parámetro Titular.
                 break;
             case "EditTable":
-                EditParams(in, "Mesa");
+                EditParams(in, "Mesa"); // Se llama a la función EditParams y le pasamos como parámetro Mesa.
                 break;
-            case "EditOrder":
-                EditParams(in, "Orden");
+            case "EditOrders":
+                EditParams(in, "Orden"); // Se llama a la función EditParams y le pasamos como parámetro Orden.
                 break;
             case "DeleteOrder":
-                DeleteOrder(in);
+                DeleteOrder(in); // Se llama a la función DeleteOrder.
                 break;
             case "AllOrders":
-                AllOrders();
+                AllOrders(); // Se llama a la función AllOrders.
                 break;
             case "Report":
-                GenerateReport();
+                GenerateReport(); // Se llama a la función GenerateReport.
                 break;
-            
-            case null:
+            case null: // Si no pasa ningún parámetro, entonces retorna.
                 break;
-            default:
-                System.out.println("asd");
+            default: // Si no existe ningún parámetro, entonces retorna.
                 break;
         }
     }
@@ -390,6 +403,7 @@ public class Utilities{
         }
         // Si no lo encuentra muestra un mensaje referente.
         if(!isFound){
+            Clear();
             System.out.println("Usuario no encontrado.");
         }
         // Retorna el número.
@@ -460,6 +474,7 @@ public class Utilities{
         // Se le asigna a la variable local el nuevo identity.
         this.identity = identity;
         // Se desplaza un menú de edición de producto.
+        Clear();
         String[][] menu = {{"EditNameP","Editar Nombre"},{"EditDescription", "Editar Descripción"}, {"EditPrice", "Editar Precio"}, {"EditStock", "Editar Stock"}};
         Menu("Edición de producto", menu, in);
     }
@@ -484,6 +499,7 @@ public class Utilities{
         }
         // Si no lo encuentra muestra un mensaje referente.
         if(!isFound){
+            Clear();
             System.out.println("Producto no encontrado.");
         }
         // Retorna el número.
@@ -497,17 +513,19 @@ public class Utilities{
      */
     public void EditParams(Scanner in, String param){
         // Se usa un switch para identificar los tipos de parámetros a editar.
-        switch (param) {
+        switch (param) { // En cada parámetro se cambian los datos descubriendo la posición del parámetro, y asignándole uno nuevo.
             case "Nombre":
                 System.out.println("Ingrese el nuevo nombre:" + "(" + param + " actual: " + nameProduct.get(identity) + ")");
                 String newNameP = in.nextLine();
                 nameProduct.set(identity, newNameP);
+                Clear();
                 System.out.println("El nombre se ha actualizado correctamente.");
                 break;
             case "Descripción":
                 System.out.println("Ingrese la nueva descripción:" + "(" + param + " actual: " + descriptionProduct.get(identity) + ")");
                 String newDescription = in.nextLine();
                 descriptionProduct.set(identity, newDescription);
+                Clear();
                 System.out.println("La descripción se ha actualizado correctamente.");
                 break;
             case "Precio":
@@ -515,6 +533,7 @@ public class Utilities{
                 int newPrice = in.nextInt();
                 in.nextLine();
                 priceProduct.set(identity, newPrice);
+                Clear();
                 System.out.println("El precio se ha actualizado correctamente.");
                 break;
             case "Stock":
@@ -522,46 +541,79 @@ public class Utilities{
                 int newStock = in.nextInt();
                 in.nextLine();
                 stockProduct.set(identity, newStock);
+                Clear();
                 System.out.println("El stock se ha actualizado correctamente.");
                 break;
             case "Titular":
-                ArrayList<String> ordersList = orders.get(titular.get(identity));
+                // Se crea un arrayList local del switch para guardar datos momentáneos.
+                ArrayList<String> ordersList = orders.get(titular.get(identity)); // Se copian los valores originales.
                 System.out.println("Ingrese el nuevo titular:" + "(" + param + " actual: " + titular.get(identity) + ")");
                 String newTitular = in.nextLine();
+                // Se setea el nuevo nombre del titular.
                 titular.set(identity, newTitular);
+                // Se eliminan los datos del antiguo titular.
                 orders.remove(titular.get(identity));
+                // Se agregan los datos del nuevo titular.
                 orders.put(newTitular, ordersList);
+                Clear();
                 System.out.println("El titular se ha actualizado correctamente.");
                 break;
             case "Mesa":
-                System.out.println("Ingrese la nueva mesa:" + "(" + param + " actual: " + stockProduct.get(identity) + ")");
+                System.out.println("Ingrese la nueva mesa:" + "(" + param + " actual: " + table.get(identity) + ")");
                 String newTable = in.nextLine();
                 in.nextLine();
                 table.set(identity, newTable);
+                Clear();
                 System.out.println("La mesa se ha actualizado correctamente.");
                 break;
             case "Orden":
-                String foundTitular = titular.get(identity);
-                ArrayList<String> newOrdersList = new ArrayList<>();
-                String res;
                 boolean hasMoreOrders = true;
-                int total = 0;
+                int total = 0, stock[] = new int[idProduct.size()], count[] = new int[idProduct.size()];
+                String res;
+                // Se busca al titular gracias al identity (su posición).
+                String foundTitular = titular.get(identity);
+                // Se crea una variable local para almacenar datos momentáneos.
+                ArrayList<String> newOrdersList = new ArrayList<>();
                 System.out.println("Ingrese la nueva orden:" + "(" + param + " actual: " + orders.get(titular.get(identity)) + ")");
+                // Se hace un bucle para ingresar las órdenes.
                 do {
+                    // Se setea la variable positionProduct en 0, ya que pasará por el foreach.
+                    int positionProduct = 0;
+                    // Se imprimen los platos disponibles.
                     for (String string : nameProduct) {
-                        System.out.println("- " + string);
+                        // Si hay stock, entonces mostrará el producto, de lo contrario no lo mostrará.
+                        if(stockProduct.get(positionProduct) > 0) System.out.println("- " + string);
+                        positionProduct++;
                     }
                     String orderDetail = in.nextLine();
-                    identity = GetProductIdentity(orderDetail);
-                    if(identity == -1) return;
-                    newOrdersList.add(orderDetail);
-                    total = total + priceProduct.get(identity);
-                    System.out.println("¿Tiene otra orden?: (y/n)");
-                    res = in.nextLine();
-                    if(res.equals("n")) hasMoreOrders = false;
+                    // Se setea el identity al buscar el producto por su nombre.
+                    int identity = GetProductIdentity(orderDetail);
+                    if(identity == -1) return; // Si la variable identity es -1 es porque no ha encontrado el producto.
+                    // Para evitar bugueos se condiciona nuevamente si es que existe stock del producto.
+                    if(stockProduct.get(identity) > 0){
+                        stock[identity] = stockProduct.get(identity);
+                        if(stock[identity] <= count[identity]){
+                            System.out.println("No hay stock disponible.");
+                        } else{
+                            count[identity] = count[identity] + 1;
+                            newOrdersList.add(orderDetail);
+                            total = total + priceProduct.get(identity);
+                        }
+                        System.out.println("¿Tiene otra orden?: (y/n)");
+                        res = in.nextLine();
+                        if(res.equals("n")) hasMoreOrders = false;
+                    } else{
+                        // De lo contrario, le asignará que escoga otra opción.
+                        System.out.println("No hay stock disponible.");
+                        continue;
+                    }
                 } while (hasMoreOrders);
+                // Se remplazan los datos de las órdenes a nombre del titular.
                 orders.replace(foundTitular, newOrdersList);
+                // Se setea el total del pedido.
                 totalMount.set(identity ,total);
+                stockProduct.set(identity, stock[identity] - count[identity]);
+                Clear();
                 System.out.println("La orden se ha actualizado correctamente.");
                 break;
             default:
@@ -595,12 +647,18 @@ public class Utilities{
         descriptionProduct.remove(identity);
         priceProduct.remove(identity);
         stockProduct.remove(identity);
+        Clear();
         System.out.println("El producto se ha eliminado correctamente.");
     }
 
+    /*
+     * Se crea la función RegisterOrder para registrar las órdenes. 
+     * Init RegisterOrder Function.
+     */
     public void RegisterOrder(Scanner in){
+        // Se crean las variables hasMoreOrders que indicará si el bucle continúa o no, y el total que sumará el precio de todos los productos asignados.
         boolean hasMoreOrders = true;
-        int total = 0;
+        int total = 0, stock[] = new int[idProduct.size()], count[] = new int[idProduct.size()];
         String res;
         System.out.println("Ingrese el nombre del titular:");
         String titularOrder = in.nextLine();
@@ -608,50 +666,77 @@ public class Utilities{
         String tableOrder = in.nextLine();
         System.out.println("Ingrese las órdenes:");
         ArrayList<String> ordersList = new ArrayList<>();
+        // Se hace un bucle para agregar los productos.
         do {
+            // Se crea la variable para identificar la posición del producto.
+            int positionProduct = 0;
+            // Se imprime todos los productos que tengan stock.
             for (String string : nameProduct) {
-                System.out.println("- " + string);
+                if(stockProduct.get(positionProduct) > 0) System.out.println("- " + string);
+                positionProduct++;
             }
             String orderDetail = in.nextLine();
+            // Se setea el identity como la posición del producto.
             int identity = GetProductIdentity(orderDetail);
             if(identity == -1) return;
-            ordersList.add(orderDetail);
-            total = total + priceProduct.get(identity);
-            System.out.println("¿Tiene otra orden?: (y/n)");
-            res = in.nextLine();
-            if(res.equals("n")) hasMoreOrders = false;
+            // Si es que hay stock del producto, entonces lo agregará a la orden.
+            if(stockProduct.get(identity) > 0){
+                stock[identity] = stockProduct.get(identity);
+                if(stock[identity] <= count[identity]){
+                    System.out.println("No hay stock disponible.");
+                } else{
+                    count[identity] = count[identity] + 1;
+                    ordersList.add(orderDetail);
+                    total = total + priceProduct.get(identity);
+                }
+                System.out.println("¿Tiene otra orden?: (y/n)");
+                res = in.nextLine();
+                if(res.equals("n")) hasMoreOrders = false;
+            } else{
+                // De lo contrario, le asignará que escoga otra opción.
+                System.out.println("No hay stock disponible.");
+                continue;
+            }
+            
         } while (hasMoreOrders);
+        // Se agregan los datos de manera equitativa.
+        stockProduct.set(identity, stock[identity] - count[identity]);
         idOrder.add("ORDER-"+(idOrder.size()+1));
         titular.add(titularOrder);
         table.add(tableOrder);
         orders.put(titularOrder, ordersList);
         totalMount.add(total);
+        Clear();
+        System.out.println("El pedido se ha registrado correctamente.");
     }
-    /*
-     * Creamos la función EditProduct que nos permitirá cambiar los parámetros de un producto.
-     * Init EditProduct Function.
-     */
+    // End RegisterOrder Function.
 
+    /*
+     * Creamos la función EditOrder que nos permitirá cambiar los parámetros de una orden o pedido.
+     * Init EditOrder Function.
+     */
     public void EditOrder(Scanner in){
         // Reseteamos el valor de identity.
         this.identity = -1;
-        // Se muestra la lista de los nombres de los productos.
+        // Se muestra la lista de los nombres de las órdenes.
         for (String order : idOrder) {
             System.out.println("- " + order);
         }
         System.out.println("Ingrese el ID de la orden a editar");
         String searchOrder = in.nextLine();
-        // Se obtiene la posición del nombre del producto.
+        // Se obtiene la posición del nombre de la orden.
         int identity = GetOrderIdentity(searchOrder);
-        // Si el valor identity es -1 es porque no encontró el producto.
+        // Si el valor identity es -1 es porque no encontró la orden.
         if(identity == -1) return;
         // Se le asigna a la variable local el nuevo identity.
         this.identity = identity;
-        // Se desplaza un menú de edición de producto.
-        String[][] menu = {{"EditTitular","Editar Titular"},{"EditTable", "Editar Mesa"}, {"EditOrder", "Editar Órdenes"}};
+        // Se desplaza un menú de edición de la orden.
+        Clear();
+        String[][] menu = {{"EditTitular","Editar Titular"},{"EditTable", "Editar Mesa"}, {"EditOrders", "Editar Órdenes"}};
         Menu("Edición de orden", menu, in);
     }
-
+    // End EditOrder Function.
+    
     /*
      * Se crea la función getProductIdentity para identificar la posición de un producto por una búsqueda por nombre.
      * Init getProductIdentity
@@ -671,25 +756,30 @@ public class Utilities{
         }
         // Si no lo encuentra muestra un mensaje referente.
         if(!isFound){
+            Clear();
             System.out.println("Orden no encontrada.");
         }
         // Retorna el número.
         return identity;
     }
     // End getProductIdentity Function.
-
+    
+    /*
+     * Se crea la función DeleteOrder para eliminar una orden en específico.
+     * Init DeleteOrder Function
+     */
     public void DeleteOrder(Scanner in){
         // Se resetea el valor de identity.
         this.identity = -1;
-        // Muestra la lista de los nombres de los productos.
+        // Muestra la lista de los nombres de las órdenes.
         for (String order : idOrder) {
             System.out.println("- " + order);
         }
         System.out.println("Ingrese el ID de la orden a eliminar.");
         String searchOrder = in.nextLine();
-        // Se descubre la posición del producto.
+        // Se descubre la posición de la orden.
         int identity = GetOrderIdentity(searchOrder);
-        // Si identity es -1 es porque no se ha encontrado el producto.
+        // Si identity es -1 es porque no se ha encontrado la orden.
         if(identity == -1) return;
         // Se setea el identity local con el nuevo identity.
         this.identity = identity;
@@ -699,11 +789,17 @@ public class Utilities{
         titular.remove(identity);
         table.remove(identity);
         totalMount.remove(identity);
+        Clear();
         System.out.println("La orden se ha eliminado correctamente.");
     }
+    // End DeleteOrder Function.
 
-    // End EditProduct Function.
+    /*
+     * Se crea la función AllOrders para imprimir todas las órdenes.
+     * Init AllOrders Function.
+     */
     public void AllOrders(){
+        // Se crea un for para imprimir dato por dato las órdenes.
         for (int i = 0; i < idOrder.size(); i++) {
             System.out.println(idOrder.get(i));
             System.out.println(titular.get(i));
@@ -712,7 +808,12 @@ public class Utilities{
             System.out.println(totalMount.get(i));
         }
     }
+    // End AllOrders Function.
 
+    /*
+     * Se crea la función GenerateReport para imprimir un reporte de los pedidos.
+     * Init GenerateReport Function.
+     */
     public void GenerateReport(){
         int total = 0;
         System.out.println("Número de Órdenes: " + orders.size());
@@ -722,4 +823,5 @@ public class Utilities{
         System.out.println("Ganancias totales: " + total);
         System.out.println("El reporte se ha generado exitósamente.");
     }
+    // End GenerateReport Function.
 }
