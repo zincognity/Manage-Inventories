@@ -19,9 +19,8 @@ Este proyecto se ha comenzado el día 18/07/2024 para ser presentado como trabaj
 > git clone https://github.com/jesusreluz/Final-Project-2024---Cycle-1.git
 ```
 
-2. Dirigirse al archivo [index.java](https://github.com/jesusreluz/Final-Project-2024---Cycle-1/blob/main/index.java)
-
-3. Correr la única función que se encuentra en el archivo. Puede funcionar con:
+3. Dirigirse al archivo [index.java](https://github.com/jesusreluz/Final-Project-2024---Cycle-1/blob/main/index.java)
+4. Correr la única función que se encuentra en el archivo. Puede funcionar con:
 
 ```console
 > cd ~/[directory]/Final-Project
@@ -29,7 +28,7 @@ Este proyecto se ha comenzado el día 18/07/2024 para ser presentado como trabaj
 > java index.java
 ```
 
-4. Escoger la opción 1 para iniciar sesión, e ingresar los siguientes datos.
+5. Escoger la opción 1 para iniciar sesión, e ingresar los siguientes datos.
 
 Como Administrador
 
