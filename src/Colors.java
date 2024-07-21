@@ -1,3 +1,4 @@
+package src;
 public class Colors {
     // Colores sacados de: https://nonvalet.com/posts/20210413_java_console_colors/#:~:text=To%20change%20terminal%20colors%2C%20you,names%20for%20better%20code%20readability.
     public static final String TEXT_RESET  = "\u001B[0m";

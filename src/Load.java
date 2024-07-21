@@ -1,5 +1,7 @@
+package src;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class Load extends Utilities{
 
@@ -28,8 +30,8 @@ public class Load extends Utilities{
         password = new ArrayList<>();
         type = new ArrayList<>();
         userDatabase = new ArrayList<>();
-        userDatabase.add(new ArrayList<String>() {{ add("Incognity"); add("2005jesus"); add("User"); }});
-        userDatabase.add(new ArrayList<String>() {{ add("Incognity1"); add("2005jesus1"); add("Admin"); }});
+        userDatabase.add(new ArrayList<String>() {{ add("Default"); add("secret"); add("User"); }});
+        userDatabase.add(new ArrayList<String>() {{ add("Incognity"); add("secretPassword"); add("Admin"); }});
         
         idProduct = new ArrayList<>();
         nameProduct = new ArrayList<>();
@@ -47,24 +49,24 @@ public class Load extends Utilities{
         totalMount = new ArrayList<>();
         
         ArrayList<String> orderDetails1 = new ArrayList<>();
-        orderDetails1.add("Plato a la cubana");
-        orderDetails1.add("Otro plato");
+        orderDetails1.add("Fideos verdes");
+        orderDetails1.add("Milanesa");
 
         idOrder.add("ORDER-1");
-        titular.add("Juan");
+        titular.add("Juan Perez");
         table.add("3");
-        orders.put("Juan", orderDetails1);
-        totalMount.add(100);
+        orders.put("Juan Perez", orderDetails1);
+        totalMount.add(55);
 
         ArrayList<String> orderDetails2 = new ArrayList<>();
-        orderDetails2.add("Plato a la cuba");
-        orderDetails2.add("Otro pato");
+        orderDetails2.add("Milanesa");
+        orderDetails2.add("Milanesa");
 
         idOrder.add("ORDER-2");
-        titular.add("Juan2");
+        titular.add("Pedro Oliva");
         table.add("2");
-        orders.put("Juan2", orderDetails2);
-        totalMount.add(100);
+        orders.put("Pedro Oliva", orderDetails2);
+        totalMount.add(60);
 
         
         registerData();
