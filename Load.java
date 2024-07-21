@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Load extends Utilities{
 
@@ -36,8 +37,36 @@ public class Load extends Utilities{
         priceProduct = new ArrayList<>();
 		stockProduct = new ArrayList<>();
         productDatabase = new ArrayList<>();
-        productDatabase.add(new ArrayList<String>() {{ add("1"); add("Fideos verdes"); add("Plato de arroz con fideos verdes."); add("25"); add("10"); }});
-        productDatabase.add(new ArrayList<String>() {{ add("2"); add("Milanesa"); add("Plato de arroz con pollo empanizado."); add("30"); add("15");}});
+        productDatabase.add(new ArrayList<String>() {{ add("0"); add("Fideos verdes"); add("Plato de arroz con fideos verdes."); add("25"); add("10"); }});
+        productDatabase.add(new ArrayList<String>() {{ add("1"); add("Milanesa"); add("Plato de arroz con pollo empanizado."); add("30"); add("15");}});
+        
+        idOrder = new ArrayList<>();
+        titular = new ArrayList<>();
+        table = new ArrayList<>();
+        orders = new HashMap<>();
+        totalMount = new ArrayList<>();
+        
+        ArrayList<String> orderDetails1 = new ArrayList<>();
+        orderDetails1.add("Plato a la cubana");
+        orderDetails1.add("Otro plato");
+
+        idOrder.add("1");
+        titular.add("Juan");
+        table.add("3");
+        orders.put("Juan", orderDetails1);
+        totalMount.add(100);
+
+        ArrayList<String> orderDetails2 = new ArrayList<>();
+        orderDetails2.add("Plato a la cuba");
+        orderDetails2.add("Otro pato");
+
+        idOrder.add("2");
+        titular.add("Juan2");
+        table.add("2");
+        orders.put("Juan2", orderDetails2);
+        totalMount.add(100);
+
+        
         registerData();
     }
 }

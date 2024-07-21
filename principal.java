@@ -12,8 +12,8 @@ import java.util.Scanner;
 public class principal{
 	public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-		Load user = new Load();
+		Load load = new Load();
 		String[][] menu = {{"Auth", "Iniciar Sesión"}, {"Register", "Registrarse"}};
-        user.Menu("Principal", menu, in);
+        load.Menu("Principal", menu, in);
 	}
 }
